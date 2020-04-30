@@ -1,16 +1,18 @@
 const keyboard = document.getElementById('qwerty');
 const phrase = document.getElementById('phrase');
 let missed = 0;
+let lettersShown = 0;
 
 const startButton = document.querySelector('.btn__reset');
-const winresetButton = document.querySelector('.winreset');
-const loseresetButton = document.querySelector('.losereset');
+const winResetButton = document.querySelector('.winreset');
+const loseResetButton = document.querySelector('.losereset');
 const startScreen = document.querySelector('.start');
 const winScreen = document.querySelector('.win');
 const loseScreen = document.querySelector('.lose');
-const phrases = ["java", "comp", "javascript"];
+const phrases = ["comp uter", "java script", "pro gramming", "web development"];
 const ul = document.getElementById('phrase').firstElementChild;
-const phraseArray = getRandomPhraseAsArray(phrases);
+let phraseArray = getRandomPhraseAsArray(phrases);
+let phraseLength = phraseArray.length;
 
 startButton.addEventListener('click', ()=> {
     startScreen.style.display = 'none';
@@ -36,6 +38,7 @@ function addPhraseToDisplay(arr){
 }
 
 addPhraseToDisplay(phraseArray); 
+phraseLengthFunction();
 
 function checkLetter(letter){
     const letterLi = document.querySelectorAll('.letter');
@@ -54,25 +57,24 @@ function checkLetter(letter){
 
 }
 
+// remove spaces as counting for phraselength
 function phraseLengthFunction() {
-    phraseLength = phraseArray.length;
-    for(i = 0; i < phraseArray.length; i += 1) {
+    for(i = 0; i < phraseLength; i += 1) {
         if (phraseArray[i] === ' ') {
             phraseLength -= 1;
             }
     }
 }
 
-
+// function to check if the game has been won or lost
 function checkWin(){
     const letters = document.getElementsByClassName('letter');
-    let lettersShown = 0;
+    lettersShown = 0;
     for (let i = 0; i < letters.length; i += 1){
         if (letters[i].classList.contains("show")) {
             lettersShown += 1;
         }
     }
-    phraseLengthFunction();
     
     if (phraseLength === lettersShown) {
         winScreen.style.removeProperty('display');
@@ -81,6 +83,7 @@ function checkWin(){
     }
 }
 
+// listener that fires for for every click on one of the keyboard buttons
 keyboard.addEventListener('click', (e) => {
     if(event.target.tagName === 'BUTTON'){
     const clickedLetter = e.target.textContent;
@@ -96,22 +99,55 @@ keyboard.addEventListener('click', (e) => {
 }
 })
 
-winresetButton.addEventListener('click', ()=> {
+// Listener on the reset button at the win screen
+
+winResetButton.addEventListener('click', ()=> {
     winScreen.style.display = 'none';
-    const newPhrase = getRandomPhraseAsArray(phrases);
-    addPhraseToDisplay(newPhrase);
+    resetGame();
+})
+
+
+// Listener for the reset button at the lose screen
+
+loseResetButton.addEventListener('click', ()=> {
+    loseScreen.style.display = 'none';
+    resetGame();
+})
+
+function resetGame() {
+    let newPhrase = getRandomPhraseAsArray(phrases);
     let clickedLetters = document.getElementsByTagName('button');
-    console.log(clickedLetters);
+    resetKeyboard(clickedLetters);
+    resetHearts();
+    removePreviousWord();
+    lettersShown = 0;
+    missed = 0;
+    addPhraseToDisplay(newPhrase);
+    phraseLength = newPhrase.length;
+    phraseLengthFunction();
+}
+
+function resetKeyboard(clickedLetters) {
     for(let i = 0; i < clickedLetters.length; i += 1) {
         if(clickedLetters[i].classList.contains('chosen')){
         clickedLetters[i].removeAttribute("class");
         clickedLetters[i].removeAttribute("disabled");
         }
     }
+}
 
-    missed = 0;
-})
+function removePreviousWord() {
+    const getAllLetters = document.getElementsByTagName('ul')[0];
+    getAllLetters.innerHTML = '';
+}
 
-loseresetButton.addEventListener('click', ()=> {
-    
-})
+function resetHearts() {
+    const clearHearts = document.getElementsByTagName('ol')[0];
+    clearHearts.innerHTML = " ";
+    for(let i = 0; i < 5; i += 1) {
+        const newHeart = document.createElement("li");
+        newHeart.classList.add("tries")
+        newHeart.innerHTML = '<img src="images/liveHeart.png" height="35px" width="30px">';
+        clearHearts.appendChild(newHeart);
+    }
+}

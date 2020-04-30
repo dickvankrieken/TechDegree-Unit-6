@@ -170,7 +170,7 @@ button {
 
 /* reset game */
 
-.winreset {  
+.winreset, .losereset {  
   padding: 8px;
   margin: 50px auto;
   background: #FFFFFF;
