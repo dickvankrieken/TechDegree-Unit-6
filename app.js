@@ -12,7 +12,6 @@ const loseScreen = document.querySelector('.lose');
 const ul = document.getElementById('phrase').firstElementChild;
 const phrases = ["On the Road", "Tristessa", "The Subterraneans", "Moby Dick", "Tropic of Cancer", "Tropic of Capricorn", "Mexico City Blues", "The Colossus of Maroussi", "The Dharma Bums"];
 let phraseArray = getRandomPhraseAsArray(phrases);
-let phraseLength = phraseArray.length;
 
 
 // *** FUNCTIONS
@@ -56,23 +55,15 @@ function checkLetter(letter){
 
 // remove spaces as counting for phraselength
 function phraseLengthFunction() {
-    for(i = 0; i < phraseLength; i += 1) {
-        if (phraseArray[i] === ' ') {
-            phraseLength -= 1;
-            }
-    }
+    phraseLength = document.querySelectorAll('.letter').length;
+    console.log(phraseLength);
 }
 
 // function to check if the game has been won or lost
 function checkWin(){
     const letters = document.getElementsByClassName('letter');
-    lettersShown = 0;
-    for (let i = 0; i < letters.length; i += 1){
-        if (letters[i].classList.contains("show")) {
-            lettersShown += 1;
-        }
-    }
-    
+    lettersShown = document.querySelectorAll('.show').length;
+    phraseLengthFunction();
     if (phraseLength === lettersShown) {
         winScreen.style.removeProperty('display');
     } else if (missed >= 5) {
@@ -98,15 +89,15 @@ keyboard.addEventListener('click', (e) => {
 
 // reset the game when the play again button is clicked
 function resetGame() {
-    let newPhrase = getRandomPhraseAsArray(phrases);
+    phraseArray = getRandomPhraseAsArray(phrases);
     let clickedLetters = document.getElementsByTagName('button');
     resetKeyboard(clickedLetters);
     resetHearts();
     removePreviousWord();
     lettersShown = 0;
     missed = 0;
-    addPhraseToDisplay(newPhrase);
-    phraseLength = newPhrase.length;
+    addPhraseToDisplay(phraseArray);
+    phraseLength = phraseArray.length;
     phraseLengthFunction();
 }
 
