@@ -10,7 +10,7 @@ const startScreen = document.querySelector('.start');
 const winScreen = document.querySelector('.win');
 const loseScreen = document.querySelector('.lose');
 const ul = document.getElementById('phrase').firstElementChild;
-const phrases = ["comp uter", "java script", "pro gramming", "web development"];
+const phrases = ["On the Road", "Tristessa", "The Subterraneans", "Moby Dick", "Tropic of Cancer", "Tropic of Capricorn", "Mexico City Blues", "The Colossus of Maroussi", "The Dharma Bums"];
 let phraseArray = getRandomPhraseAsArray(phrases);
 let phraseLength = phraseArray.length;
 
@@ -42,7 +42,7 @@ function checkLetter(letter){
     const letterLi = document.querySelectorAll('.letter');
     let matched = null;
     for(let i = 0; i < letterLi.length; i++){
-        if(letter === letterLi[i].textContent) {
+        if(letter === letterLi[i].textContent.toLowerCase()) {
             letterLi[i].classList.add("show");
             matched = true;
         } 
