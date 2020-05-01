@@ -1,28 +1,28 @@
+// *** VARIABLES
 const keyboard = document.getElementById('qwerty');
 const phrase = document.getElementById('phrase');
 let missed = 0;
 let lettersShown = 0;
-
 const startButton = document.querySelector('.btn__reset');
 const winResetButton = document.querySelector('.winreset');
 const loseResetButton = document.querySelector('.losereset');
 const startScreen = document.querySelector('.start');
 const winScreen = document.querySelector('.win');
 const loseScreen = document.querySelector('.lose');
-const phrases = ["comp uter", "java script", "pro gramming", "web development"];
 const ul = document.getElementById('phrase').firstElementChild;
+const phrases = ["comp uter", "java script", "pro gramming", "web development"];
 let phraseArray = getRandomPhraseAsArray(phrases);
 let phraseLength = phraseArray.length;
 
-startButton.addEventListener('click', ()=> {
-    startScreen.style.display = 'none';
-});
 
+// *** FUNCTIONS
+// take a random phrase and break it into a new array
 function getRandomPhraseAsArray(arr){
     const randomWord = arr[Math.floor(Math.random() * arr.length)].split("");
     return randomWord;
 }
 
+// break the array into list item and add them to the display
 function addPhraseToDisplay(arr){
     for(let i = 0; i < arr.length; i += 1){
         const li = document.createElement("li");
@@ -37,9 +37,7 @@ function addPhraseToDisplay(arr){
     }
 }
 
-addPhraseToDisplay(phraseArray); 
-phraseLengthFunction();
-
+// check if chosen letter is contained in the phrase
 function checkLetter(letter){
     const letterLi = document.querySelectorAll('.letter');
     let matched = null;
@@ -54,7 +52,6 @@ function checkLetter(letter){
     } else {
         return matched;
     }
-
 }
 
 // remove spaces as counting for phraselength
@@ -91,29 +88,15 @@ keyboard.addEventListener('click', (e) => {
     e.target.setAttribute("disabled", true);
     let letterFound = checkLetter(clickedLetter);
     if (letterFound === null) {
-        const hearts = document.getElementsByTagName('ol')[0];
-        hearts.removeChild(hearts.firstElementChild);
+        const hearts = document.getElementsByTagName('ol')[0].children;
+        hearts[4-missed].children[0].src = "images/lostHeart.png";
         missed += 1;
     }
     checkWin();
 }
 })
 
-// Listener on the reset button at the win screen
-
-winResetButton.addEventListener('click', ()=> {
-    winScreen.style.display = 'none';
-    resetGame();
-})
-
-
-// Listener for the reset button at the lose screen
-
-loseResetButton.addEventListener('click', ()=> {
-    loseScreen.style.display = 'none';
-    resetGame();
-})
-
+// reset the game when the play again button is clicked
 function resetGame() {
     let newPhrase = getRandomPhraseAsArray(phrases);
     let clickedLetters = document.getElementsByTagName('button');
@@ -127,6 +110,7 @@ function resetGame() {
     phraseLengthFunction();
 }
 
+// clear chosen letters from the keyboard
 function resetKeyboard(clickedLetters) {
     for(let i = 0; i < clickedLetters.length; i += 1) {
         if(clickedLetters[i].classList.contains('chosen')){
@@ -136,11 +120,13 @@ function resetKeyboard(clickedLetters) {
     }
 }
 
+// remove the word from the previous game from the display
 function removePreviousWord() {
     const getAllLetters = document.getElementsByTagName('ul')[0];
     getAllLetters.innerHTML = '';
 }
 
+// reset the hearts back to 5 hearts. 
 function resetHearts() {
     const clearHearts = document.getElementsByTagName('ol')[0];
     clearHearts.innerHTML = " ";
@@ -151,3 +137,26 @@ function resetHearts() {
         clearHearts.appendChild(newHeart);
     }
 }
+
+// *** EVENT LISTENERS
+// listen for clicks on the start button and make the start overlay dissappear
+startButton.addEventListener('click', ()=> {
+    startScreen.style.display = 'none';
+});
+
+// Listener on the reset button at the win screen
+winResetButton.addEventListener('click', ()=> {
+    winScreen.style.display = 'none';
+    resetGame();
+})
+
+
+// Listener for the reset button at the lose screen
+loseResetButton.addEventListener('click', ()=> {
+    loseScreen.style.display = 'none';
+    resetGame();
+})
+
+// *** call functions to START GAME
+addPhraseToDisplay(phraseArray); 
+phraseLengthFunction();
